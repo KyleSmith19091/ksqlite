@@ -1,39 +1,27 @@
 package ksqlite
 
-import "errors"
+import (
+	"fmt"
 
-type ASTNode struct {
+	"github.com/xwb1989/sqlparser"
+)
+
+type Parser struct {
+
 }
 
-func Parse(tokens []Token) error {
-	if len(tokens) == 0 {
-		return nil
-	}
-
-	switch tokens[0].Type {
-	case TOKEN_ID_SELECT:
-		return handleSelect(tokens[1:])
-	case TOKEN_ID_INSERT:
-		return handleInsert(tokens[1:])
-	default:
-		return errors.New("expected a top-level keyword")
-	}
+func NewParser() *Parser {
+	return &Parser{}
 }
 
-func handleSelect(args []Token) error {
-	if len(args) == 0 {
-		return errors.New("select statement requires arguments, but none were provided")
+func Parse(sql string) error {
+	statement, err := sqlparser.Parse(sql)
+	if err != nil {
+		return fmt.Errorf("could not parse SQL: %w", err)
 	}
 
-	return nil
-}
-
-func handleInsert(args []Token) error {
-	if len(args) == 0 {
-		return errors.New("select statement requires arguments, but none were provided")
+	switch statement := statement.(type) {
+		case *sqlparser.Select:
+			statement.SelectExprs				
 	}
-
-	// insert into table_name values 1 2 "hello world"
-
-	return nil
 }

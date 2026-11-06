@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/KyleSmith19091/sqlite/ksqlite"
 	"github.com/KyleSmith19091/sqlite/metacommand"
+	"github.com/xwb1989/sqlparser"
 )
 
 const (
@@ -51,9 +51,10 @@ func main() {
 			}
 		}
 
-		_, err = ksqlite.Tokenise(out)
+		stmt, err := sqlparser.Parse(out)
 		if err != nil {
-			slog.Error("could not tokenise input", "err", err.Error())
+			slog.Error("could not parse the SQL statement", "err", err.Error())
 		}
+		
 	}
 }
